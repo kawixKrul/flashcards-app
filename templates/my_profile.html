@@ -6,5 +6,35 @@
 </head>
 <body>
     <div id="user">Hello {{ user.username }}</div>
+    <header>
+        <h1>Hello {{ user.username }}</h1>
+        <ul>
+            <li><a href="/users">Browse users</a></li>
+            <li><a href="/my-profile">My profile</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </header>
+    {% block content %}
+        <form action="{{ url_for('my_profile') }}" method="POST">
+            <label for="question">Question:</label>
+            <input type="text" id="question" name="question"><br><br>
+            <label for="answer">Answer:</label>
+            <input type="text" id="answer" name="answer"><br><br>
+            <input type="submit" value="Add flashcard!">
+        </form>
+        {% if flashcards %}
+            <h2>Your flashcards:</h2>
+            <ul>
+            {% for fs in flashcards %}
+                <li>
+                    Answer: {{ fs.answer }} Question: {{ fs.question }}
+                    Created at: <em>{{ fs.front }} - {{ fs.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</em>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <h2>You currently have no flashcards. Please add some.</h2>
+        {% endif %}
+    {% endblock %}
 </body>
 </html>
