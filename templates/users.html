@@ -1,0 +1,9 @@
+{% extends 'my_profile.html' %}
+
+{% block content %}
+    <ul>
+        {% for user in users %}
+            <li><a href="{{ url_for('user_profile', u_id=user.id) }}">{{ user.username }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'my_profile.html' %}
+
+{% block content %}
+    {% if flashcards | length > 10 %}
+        <h2><a href="{{ url_for('quiz', u_id=u_id) }}">Challenge me!</a></h2>
+    {% else %}
+        <h2>I don't have enough cards for you to challenge me :(</h2>
+    {% endif %}
+    <div>
+    <span>My flashcards are:</span>
+    <ul>
+        {% for fs in flashcards %}
+             <li>
+             <span>
+                    Answer: {{ fs.answer }} Question: {{ fs.question }}
+                    Created at: <em>{{ fs.front }} - {{ fs.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</em>
+             </span>
+             </li>
+        {% endfor %}
+    </ul>
+    <hr>
+        {% if scores %}
+            <h2>Users who challenged you:</h2>
+            <ul>
+            {% for score in scores %}
+                <li>
+                <span>
+                    Score: {{ score.score }} Belongs to: {{ score.user_id }}
+                    Scored at: <em>{{ score.front }} - {{ score.scored_at.strftime('%Y-%m-%d %H:%M:%S') }}</em>
+                </span>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <h2>Currently no users have challenged you!</h2>
+        {% endif %}
+    </div>
+{% endblock %}

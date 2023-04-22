@@ -5,7 +5,6 @@
     <title>Title</title>
 </head>
 <body>
-    <div id="user">Hello {{ user.username }}</div>
     <header>
         <h1>Hello {{ user.username }}</h1>
         <ul>
@@ -27,13 +26,34 @@
             <ul>
             {% for fs in flashcards %}
                 <li>
+                    <span>
                     Answer: {{ fs.answer }} Question: {{ fs.question }}
                     Created at: <em>{{ fs.front }} - {{ fs.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</em>
+                    </span>
+                    <form action="{{ url_for('remove', fs_id=fs.id) }}" method="POST">
+                        <button type="submit">Remove</button>
+                    </form>
                 </li>
             {% endfor %}
             </ul>
         {% else %}
             <h2>You currently have no flashcards. Please add some.</h2>
+        {% endif %}
+        <hr>
+        {% if my_scores %}
+            <h2>Your scores:</h2>
+            <ul>
+            {% for score in my_scores %}
+                <li>
+                <span>
+                    Score: {{ score.score }} Belongs to: {{ score.user_id }}
+                    Scored at: <em>{{ score.front }} - {{ score.scored_at.strftime('%Y-%m-%d %H:%M:%S') }}</em>
+                </span>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <h2>You currently have no scores. Try challenging some users!</h2>
         {% endif %}
     {% endblock %}
 </body>

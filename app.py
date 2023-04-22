@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+import random
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -25,6 +26,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(50), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     flashcards = db.relationship('Flashcard', backref='user', lazy=True)
+    scores = db.relationship('Score', backref='user', lazy=True)
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -46,6 +48,22 @@ class Flashcard(db.Model):
     def __init__(self, question, answer, user_id):
         self.question = question
         self.answer = answer
+        self.user_id = user_id
+
+
+class Score(db.Model):
+    __tablename__ = 'scores'
+
+    id = db.Column(db.Integer, primary_key=True)
+    score = db.Column(db.Integer, nullable=False)
+    scored_at = db.Column(db.DateTime, nullable=False)
+    belongs = db.Column(db.String(50), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    def __init__(self, score, user_id, belongs):
+        self.score = score
+        self.scored_at = datetime.utcnow()
+        self.belongs = belongs
         self.user_id = user_id
 
 
@@ -109,10 +127,61 @@ def my_profile():
         db.session.add(card)
         db.session.commit()
         flash('Successfully added a new flashcard!', 'success')
+
     flashcards = Flashcard.query.filter_by(user_id=current_user.id).all()
-    return render_template('my_profile.html', user=current_user, flashcards=flashcards)
+    my_scores = Score.query.filter_by(belongs=current_user.username).all()
+    return render_template('my_profile.html', user=current_user, flashcards=flashcards, my_scores=my_scores)
 
 
+@app.route('/my-profile/remove/<int:fs_id>', methods=['POST'])
+@login_required
+def remove(fs_id):
+    fs = Flashcard.query.filter_by(id=fs_id).first()
+    db.session.delete(fs)
+    db.session.commit()
+    return redirect(url_for('my_profile'))
+
+
+@app.route('/users', methods=['GET', 'POST'])
+@login_required
+def users():
+    user_list = User.query.filter(User.id != current_user.id).all()
+    return render_template('users.html', users=user_list, user=current_user)
+
+
+@app.route('/users/<int:u_id>', methods=['GET', 'POST'])
+@login_required
+def user_profile(u_id):
+    flashcards = Flashcard.query.filter_by(user_id=u_id).all()
+    scores = Score.query.filter_by(user_id=u_id).all()
+    return render_template('user_profile.html', flashcards=flashcards, u_id=u_id, user=current_user, scores=scores)
+
+
+@app.route('/quiz/<int:u_id>', methods=['GET', 'POST'])
+@login_required
+def quiz(u_id):
+    if request.method == 'POST':
+        score = request.json['score']
+        current_score = Score.query.filter(Score.user_id == u_id, Score.belongs == current_user.username).first()
+        if current_score is not None and current_score.score < score:
+            current_score.score = score
+            current_score.time = datetime.utcnow()
+            flash('Score updated! New best!', 'success')
+        elif current_score is not None and current_score.score > score:
+            flash('Not your best attempt. Try harder!', 'success')
+        elif current_score is None:
+            new_score = Score(score=score, user_id=u_id, belongs=current_user.username)
+            db.session.add(new_score)
+            flash('New score added!', 'success')
+        db.session.commit()
+        return redirect(url_for('user_profile', u_id=u_id))
+
+    sample = random.sample(Flashcard.query.filter_by(user_id=u_id).all(), 10)
+    questions = [s.question for s in sample]
+    correct_answers = [s.answer for s in sample]
+    for i in zip(questions, correct_answers):
+        print(i)
+    return render_template('quiz.html', u_id=u_id, questions=questions, correct_answers=correct_answers)
 
 
 @app.route('/')
