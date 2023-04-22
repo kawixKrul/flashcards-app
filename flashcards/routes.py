@@ -17,6 +17,9 @@ def signup():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        if len(username) == 0 or len(password) == 0:
+            flash('Username and password cannot be blank!')
+            return render_template('signup.html')
         existing_user = User.query.filter_by(username=username).first()
         if existing_user is None:
             user = User(username=username, password=password)
@@ -34,6 +37,7 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
+        flash('Login successful!', 'success')
         return redirect(url_for('my_profile', user=current_user))
 
     if request.method == 'POST':
@@ -42,7 +46,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user is not None and check_password_hash(user.password_hash, password):
             login_user(user)
-            print('login succesful')
+            flash('Login successful!', 'success')
             return redirect(url_for('my_profile', user=current_user))
         else:
             flash('Invalid username or password.', 'error')
@@ -54,6 +58,7 @@ def login():
 @login_required
 def logout():
     logout_user()
+    flash('Successfully logged-out!', 'success')
     return redirect(url_for('home'))
 
 
@@ -79,6 +84,7 @@ def remove(fs_id):
     fs = Flashcard.query.filter_by(id=fs_id).first()
     db.session.delete(fs)
     db.session.commit()
+    flash('Removed flashcard!', 'success')
     return redirect(url_for('my_profile'))
 
 
@@ -119,8 +125,6 @@ def quiz(u_id):
     sample = random.sample(Flashcard.query.filter_by(user_id=u_id).all(), 10)
     questions = [s.question for s in sample]
     correct_answers = [s.answer for s in sample]
-    for i in zip(questions, correct_answers):
-        print(i)
     return render_template('quiz.html', u_id=u_id, questions=questions, correct_answers=correct_answers)
 
 

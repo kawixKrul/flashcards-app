@@ -3,13 +3,17 @@
 {% block title %}Log in{% endblock %}
 
 {% block content %}
-    <h1>Login Form</h1>
-    <form action="{{ url_for('login') }}" method="POST">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username"><br><br>
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password"><br><br>
-      <input type="submit" value="Login">
+    <form action="{{ url_for('login') }}" method="post">
+        <h3>Login Here</h3>
+
+        <label for="username">Username</label>
+        <input type="text" placeholder="Username" name="username" id="username">
+
+        <label for="password">Password</label>
+        <input type="password" placeholder="Password" name="password" id="password">
+
+        <button>Log In</button>
+
     </form>
-    <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></p>
+
 {% endblock %}

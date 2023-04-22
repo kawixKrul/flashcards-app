@@ -1,2 +1,7 @@
 # Ignore database files
 *.db
+
+#Ignore images
+*.jpg
+*.png
+*.jpeg
