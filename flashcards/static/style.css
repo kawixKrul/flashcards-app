@@ -10,6 +10,29 @@ body{
     background-color: #080710;
 }
 
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 10px;
+    font-family: 'Poppins',sans-serif;
+}
+
+.logo {
+    color: whitesmoke;
+}
+
+.navigation a {
+    font-size: 1.2em;
+    color: whitesmoke;
+    transition: all 0.3s ease 0s;
+    padding: 30px 20px;
+}
+
+.navigation a:hover {
+    color: #23a2f6;
+}
+
 .background{
     width: 430px;
     height: 520px;
@@ -108,20 +131,4 @@ button{
     font-weight: 600;
     border-radius: 5px;
     cursor: pointer;
-}
-.social{
-  margin-top: 30px;
-  display: flex;
-}
-.social div {
-    width: 150px;
-    border-radius: 3px;
-    padding: 5px 10px 10px 5px;
-    background: rgba(255, 255, 255, 0.27);
-    color: #eaf0fb;
-    text-align: center;
-}
-
-.social div:hover{
-  background-color: rgba(255,255,255,0.47);
 }

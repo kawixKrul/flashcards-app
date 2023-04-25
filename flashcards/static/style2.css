@@ -1,0 +1,59 @@
+*,
+*:before,
+*:after{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: white;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 10px;
+    font-family: 'Poppins',sans-serif;
+}
+
+.logo {
+    color: whitesmoke;
+}
+
+.navigation a {
+    font-size: 1.2em;
+    color: whitesmoke;
+    transition: all 0.3s ease 0s;
+    padding: 30px 20px;
+}
+
+.navigation a:hover {
+    color: #23a2f6;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: rgba(128, 128, 128, 0.5);
+  backdrop-filter: blur(5px);
+  border: 2px solid blue;
+  padding: 10px;
+}
+
+.flex-item-left {
+  width: 100%;
+  order: 1;
+  margin-bottom: 10px;
+}
+
+.flex-item-right {
+  order: 2;
+}
+
+.flex-item {
+  background-color: white;
+  padding: 10px;
+}

@@ -18,18 +18,18 @@ def signup():
         username = request.form['username']
         password = request.form['password']
         if len(username) == 0 or len(password) == 0:
-            flash('Username and password cannot be blank!')
+            flash('Username and password cannot be blank!', category='error')
             return render_template('signup.html')
         existing_user = User.query.filter_by(username=username).first()
         if existing_user is None:
             user = User(username=username, password=password)
             db.session.add(user)
             db.session.commit()
-            flash('You have successfully signed up!', 'success')
+            flash('You have successfully signed up!', category='success')
             login_user(user)
             return redirect(url_for('my_profile', user=current_user))
         else:
-            flash('That username is already taken.', 'error')
+            flash('That username is already taken.', category='error')
 
     return render_template('signup.html')
 
@@ -129,5 +129,6 @@ def quiz(u_id):
 
 
 @app.route('/')
+@app.route('/home')
 def home():  # put application's code here
     return render_template('base.html')

@@ -3,17 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="../static/style2.css">
+    <link rel="stylesheet" href="../static/style_flash.css">
 </head>
 <body>
     <header>
-        <h1>Hello {{ user.username }}</h1>
-        <ul>
-            <li><a href="/users">Browse users</a></li>
-            <li><a href="/my-profile">My profile</a></li>
-            <li><a href="/logout">Logout</a></li>
-        </ul>
+        <h2>Hello {{ user.username }}</h2>
+        <nav class="navigation">
+            <a href="/users">Browse users</a>
+            <a href="/my-profile">My profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
     </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="flash-message" class="success" role="alert">
+            {% for category, message in messages %}
+                {% if category == 'success' %}
+                    <p class="{{ category }}">{{ message }}</p>
+                {% elif category == 'error' %}
+                    <p class="{{ category }}">{{ message }}</p>
+                {% endif %}
+            {% endfor %}
+            <button type="button" class="btn-close" onclick="dismissFlashMessage()">Dismiss</button>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="flex-container">
     {% block content %}
+        <div class="flexbox-form">
         <form action="{{ url_for('my_profile') }}" method="POST">
             <label for="question">Question:</label>
             <input type="text" id="question" name="question"><br><br>
@@ -21,6 +41,8 @@
             <input type="text" id="answer" name="answer"><br><br>
             <input type="submit" value="Add flashcard!">
         </form>
+        </div>
+        <div class="flex-item-left">
         {% if flashcards %}
             <h2>Your flashcards:</h2>
             <ul>
@@ -39,7 +61,9 @@
         {% else %}
             <h2>You currently have no flashcards. Please add some.</h2>
         {% endif %}
+        </div>
         <hr>
+        <div class="flex-item-right">
         {% if my_scores %}
             <h2>Your scores:</h2>
             <ul>
@@ -55,6 +79,11 @@
         {% else %}
             <h2>You currently have no scores. Try challenging some users!</h2>
         {% endif %}
+        </div>
     {% endblock %}
+    </div>
+
+<script src="../static/flash_msg.js"></script>
+
 </body>
 </html>

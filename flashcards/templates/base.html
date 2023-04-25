@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/style_flash.css">
 </head>
 <body>
     <div class="background">
@@ -14,23 +15,33 @@
         <div class="shape"></div>
     </div>
     <header>
-        <h2 class="logo">flashcards</h2>
+        <h2 class="logo">Flashcards</h2>
         <nav class="navigation">
-            <a href="/">Home</a>
+            <a href="/home">Home</a>
             <a href="/login">Login</a>
             <a href="/signup">Signup</a>
         </nav>
     </header>
-    {% with messages = get_flashed_messages() %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
+            <div id="flash-message" class="success" role="alert">
+            {% for category, message in messages %}
+                {% if category == 'success' %}
+                    <p class="{{ category }}">{{ message }}</p>
+                {% elif category == 'error' %}
+                    <p class="{{ category }}">{{ message }}</p>
+                {% endif %}
             {% endfor %}
-            </ul>
+            <button type="button" class="btn-close" onclick="dismissFlashMessage()">Dismiss</button>
+            </div>
         {% endif %}
     {% endwith %}
 
-    {% block content %}{% endblock %}
+    {% block content %}
+    {% endblock %}
+
+<script src="../static/flash_msg.js"></script>
+
 </body>
 </html>

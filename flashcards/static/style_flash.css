@@ -1,0 +1,44 @@
+#flash-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    width: 400px;
+    height: 520px;
+    border: 2px solid lightseagreen;
+    border-radius: 10px;
+    text-align: center;
+    color: black;
+    background-color: dimgrey;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#flash-message button {
+    background-color: black;
+    color: white;
+    margin-top: 20px;
+    align-items: center;
+    align-self: flex-end;
+    border: 2px solid lightseagreen;
+    transition: all 0.3s ease 0s;
+}
+
+#flash-message button:hover {
+    background-color: #23a2f6;
+    color: black;
+}
+
+.success {
+    margin: auto;
+    font-size: 2em;
+    color: #4bff1f;
+}
+
+.error {
+    margin: auto;
+    font-size: 2em;
+    color: red;
+}
