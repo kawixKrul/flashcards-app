@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="../static/quiz.css">
 </head>
 <body>
+
+<div class="spacer layer1"></div>
+
 <form id="quiz-form">
     <div id="question-container"></div>
     <div id="answer-container">
@@ -12,7 +16,7 @@
         <input type="text" name="answer" id="answer">
         <button type="submit" id="submit">Submit</button>
     </div>
-    <div id="score-container">Score: <span id="score">0</span></div>
+    <div id="score-container">Score: <span id="score">0</span>/10</div>
 </form>
 
 <script>

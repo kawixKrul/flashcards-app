@@ -25,7 +25,7 @@
             {% for score in scores %}
                 <li>
                 <span>
-                    Score: {{ score.score }} Belongs to: {{ score.user_id }}
+                    Score: {{ score.score }} Belongs to: {{ score.belongs }}
                     Scored at: <em>{{ score.front }} - {{ score.scored_at.strftime('%Y-%m-%d %H:%M:%S') }}</em>
                 </span>
                 </li>
